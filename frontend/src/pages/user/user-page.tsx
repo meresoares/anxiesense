@@ -117,7 +117,7 @@ const UserPage: React.FC = () => {
                   <SexoSelect sexo={sexo} onChange={setSexo} />
                 </div>
                 <div className="mb-3">
-                  <FechaNacimientoPicker startDate={startDate} onChange={setStartDate} datePickerRef={datePickerRef} />
+                  <FechaNacimientoPicker startDate={startDate} onChange={setStartDate} />
                 </div>
                 <div className="mb-3">
                   <UniversidadCarreraSelect universidad={universidad} carrera={carrera} onChangeUniversidad={setUniversidad} onChangeCarrera={setCarrera} />

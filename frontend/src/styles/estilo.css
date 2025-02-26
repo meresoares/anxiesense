@@ -48,7 +48,7 @@
 }
 
 .icon-color {
-  color: #574008
+  color: #574008;
 }
 
 .mere_card_detalles {
@@ -85,6 +85,25 @@
 }
 .mere_navbar_color {
   color: #574008 !important;
+}
+
+/* Asegurar que el navbar se colapse en móviles */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+  }
+
+  .mere_navbar_color {
+    color: #574008 !important;
+    padding: 0.5rem 0;
+  }
+
+  .navbar-toggler {
+    order: 3; /* Posicionar el botón hamburguesa a la derecha */
+  }
 }
 
 .vlad_p {
@@ -442,7 +461,7 @@ body {
   color: #ffffff;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .mere_resultado_detalle.moderate {

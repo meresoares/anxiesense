@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const Register: React.FC = () => {
     const auth = useAuth();
     const { register } = useAuth();
-    const [username, setUsername] = useState('');
+    //const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
         setError('');
 
         // Validación de campos vacíos
-        if (!username || !email || !password || !repeatPassword) {
+        if (!email || !password || !repeatPassword) {
             setError('Por favor, completa todos los campos obligatorios.');
             // Habilita el botón de registro nuevamente
             setSubmitting(false);
@@ -108,22 +108,42 @@ const Register: React.FC = () => {
             </div>
             {error && <div className="alert alert-danger mb-2">{error}</div>}
             <div className="form-outline inputGroup-sizing-sm mb-2">
-                <input type="text" id="username" className="form-control inputGroup-sizing-sm" placeholder='Nombre de usuario' value={username} onChange={(e) => setUsername(e.target.value)} />
-            </div>
-            <div className="form-outline inputGroup-sizing-sm mb-2">
                 <input type="email" id="email" className="form-control inputGroup-sizing-sm" placeholder='Correo electrónico' value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="input-group mb-2">
-                <input type={showPassword ? 'text' : 'password'} id="repeatPassword" className="form-control inputGroup-sizing-sm" placeholder='Ingrese una contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
-                <label className="form-label" htmlFor="repeatPassword"></label>
-                <span className="input-group-text" style={{ cursor: 'pointer' }} onClick={togglePasswordVisibility}>
+                <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password" // Cambiamos el id a "password"
+                    className="form-control inputGroup-sizing-sm"
+                    placeholder="Ingrese una contraseña"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <label className="form-label" htmlFor="password"></label>
+                <span
+                    className="input-group-text"
+                    style={{ cursor: 'pointer' }}
+                    onClick={togglePasswordVisibility}
+                >
                     <i className="fas fa-eye" style={{ color: '#666' }}></i>
                 </span>
             </div>
+
             <div className="input-group mb-2">
-                <input type={showPassword ? 'text' : 'password'} id="repeatPassword" className="form-control inputGroup-sizing-sm" placeholder='Repetir contraseña' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                <input
+                    type={showRepeatPassword ? 'text' : 'password'}
+                    id="repeatPassword" // Manteniendo el id único para este campo
+                    className="form-control inputGroup-sizing-sm"
+                    placeholder="Repetir contraseña"
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                />
                 <label className="form-label" htmlFor="repeatPassword"></label>
-                <span className="input-group-text" style={{ cursor: 'pointer' }} onClick={toggleRepeatPasswordVisibility}>
+                <span
+                    className="input-group-text"
+                    style={{ cursor: 'pointer' }}
+                    onClick={toggleRepeatPasswordVisibility}
+                >
                     <i className="fas fa-eye" style={{ color: '#666' }}></i>
                 </span>
             </div>
@@ -141,7 +161,6 @@ const Register: React.FC = () => {
                 </button>
             </div>
             {successMessage && <p>{successMessage}</p>}
-            {error && <p>{error}</p>}
             <p className="text-center" style={{ color: '#666' }}>¿Ya tienes una cuenta? <Link to="/" style={{ color: '#508bfc' }}>Ingresa aquí</Link></p>
         </form>
     );

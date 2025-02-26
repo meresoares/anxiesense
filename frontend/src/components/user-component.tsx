@@ -1,10 +1,15 @@
-
-// user-component.tsx
+import React, { useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { isValid } from 'date-fns';
 import { universidades, carrerasPorUniversidad } from './universities-options-component';
+// Definimos la interfaz para FechaNacimientoPicker
+interface FechaNacimientoPickerProps {
+    startDate: Date | null;
+    onChange: (date: Date | null) => void;
+}
 
 const SexoSelect: React.FC<{ sexo: string; onChange: (value: string) => void }> = ({ sexo, onChange }) => {
     return (
@@ -28,12 +33,19 @@ const SexoSelect: React.FC<{ sexo: string; onChange: (value: string) => void }> 
     );
 };
 
-const FechaNacimientoPicker: React.FC<{ startDate: Date | null; onChange: (date: Date | null) => void; datePickerRef: React.RefObject<DatePicker> }> = ({ startDate, onChange, datePickerRef }) => {
+const FechaNacimientoPicker: React.FC<FechaNacimientoPickerProps> = ({ startDate, onChange }) => {
+    const datePickerRef = useRef<DatePicker>(null);
+
     const focusDatePicker = () => {
         if (datePickerRef.current) {
             datePickerRef.current.setFocus();
         }
     };
+
+    // Establecemos una fecha por defecto dentro del rango si startDate es null o no es válida
+    const effectiveDate = startDate && isValid(startDate) && startDate >= new Date("1990-01-01") && startDate <= new Date("2005-12-31")
+        ? startDate
+        : new Date("1995-01-01");
 
     return (
         <div className="mb-3 d-flex align-items-center">
@@ -43,16 +55,21 @@ const FechaNacimientoPicker: React.FC<{ startDate: Date | null; onChange: (date:
             <div className="input-group">
                 <DatePicker
                     id="fechaNacimiento"
-                    selected={startDate}
+                    selected={effectiveDate}
                     onChange={onChange}
                     showYearDropdown
                     scrollableYearDropdown
-                    yearDropdownItemNumber={20}
+                    yearDropdownItemNumber={15}
+                    showMonthDropdown
                     dateFormat="dd/MM/yyyy"
-                    maxDate={new Date("2004-12-31")}
-                    minDate={new Date("1989-01-01")}
+                    maxDate={new Date("2005-12-31")}
+                    minDate={new Date("1990-01-01")}
                     className="form-control"
                     ref={datePickerRef}
+                    placeholderText="dd/mm/aaaa"
+                    useShortMonthInDropdown
+                    popperClassName="datepicker-popper-custom" // Usar solo esta línea
+                    dropdownMode="select" // Mejor mantener en 'select' y controlar scroll via CSS
                 />
                 <span className="input-group-text" style={{ cursor: 'pointer' }} onClick={focusDatePicker}>
                     <FontAwesomeIcon icon={faCalendarAlt} />
@@ -82,14 +99,12 @@ const UniversidadCarreraSelect: React.FC<{ universidad: string; carrera: string;
                     <option value="" disabled hidden>
                         Seleccione una opción
                     </option>
-                    {/* Generar opciones de universidades */}
                     {universidades.map((universidad) => (
                         <option key={universidad.value} value={universidad.value}>{universidad.label}</option>
                     ))}
                 </select>
             </div>
 
-            {/* Opciones de carrera */}
             <div className="mb-3">
                 <label htmlFor="carrera" className="form-label">
                     Carrera
@@ -99,13 +114,11 @@ const UniversidadCarreraSelect: React.FC<{ universidad: string; carrera: string;
                     className="form-select"
                     value={carrera}
                     onChange={(e) => onChangeCarrera(e.target.value)}
-                    // Deshabilitar si no se ha seleccionado una universidad
                     disabled={!universidad}
                 >
                     <option value="" disabled hidden>
                         Seleccione una opción
                     </option>
-                    {/* Generar opciones de carrera basadas en la universidad seleccionada */}
                     {carrerasPorUniversidad[universidad as keyof typeof carrerasPorUniversidad]?.map((carrera) => (
                         <option key={carrera.value} value={carrera.value}>{carrera.label}</option>
                     ))}
@@ -113,6 +126,6 @@ const UniversidadCarreraSelect: React.FC<{ universidad: string; carrera: string;
             </div>
         </>
     );
-}
+};
 
 export { SexoSelect, FechaNacimientoPicker, UniversidadCarreraSelect };
